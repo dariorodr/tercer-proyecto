@@ -3,14 +3,34 @@ from .models import ProductoTemporada, Receta
 from .forms import ProductoTemporadaForm, RecetaForm
 from datetime import datetime
 
+# Diccionario para traducir meses
+MESES_EN_ESPANOL = {
+    'January': 'Enero',
+    'February': 'Febrero',
+    'March': 'Marzo',
+    'April': 'Abril',
+    'May': 'Mayo',
+    'June': 'Junio',
+    'July': 'Julio',
+    'August': 'Agosto',
+    'September': 'Septiembre',
+    'October': 'Octubre',
+    'November': 'Noviembre',
+    'December': 'Diciembre',
+}
+
 def inicio(request):
-    return render(request, 'paginas/inicio.html')
+    mes_actual_ingles = datetime.now().strftime('%B')
+    mes_actual = MESES_EN_ESPANOL[mes_actual_ingles]
+    productos = ProductoTemporada.objects.filter(meses_temporada__contains=mes_actual)
+    return render(request, 'paginas/inicio.html', {'productos': productos, 'mes': mes_actual})
 
 def nosotros(request):
     return render(request, 'paginas/nosotros.html')
 
 def productos_temporada(request):
-    mes_actual = datetime.now().strftime('%B').capitalize()
+    mes_actual_ingles = datetime.now().strftime('%B')
+    mes_actual = MESES_EN_ESPANOL[mes_actual_ingles]
     productos = ProductoTemporada.objects.filter(meses_temporada__contains=mes_actual)
     return render(request, 'productos/index.html', {'productos': productos, 'mes': mes_actual})
 

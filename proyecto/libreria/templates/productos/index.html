@@ -1,20 +1,28 @@
 {% extends "base.html" %}
-{% block titulo %} Productos de Temporada {% endblock %}
+{% block titulo %}Productos de Temporada{% endblock %}
 {% block contenido %}
-<h1>Productos de temporada - {{ mes }}</h1>
-<p><a href="{% url 'crear_producto' %}">Agregar producto</a></p>
-<ul>
-{% for producto in productos %}
-    <li>
-        <a href="{% url 'recetas_por_producto' producto.id %}">{{ producto.nombre }}</a>
-        {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="100">
-        {% endif %}
-        <a href="{% url 'editar_producto' producto.id %}">Editar</a> |
-        <a href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
-    </li>
-{% empty %}
-    <p>No hay productos este mes.</p>
-{% endfor %}
-</ul>
+<div class="my-5">
+    <h1 class="text-center">Productos de {{ mes }}</h1>
+    <p class="text-center"><a href="{% url 'crear_producto' %}" class="btn btn-outline-primary">Agregar producto</a></p>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <ul class="list-group">
+                {% for producto in productos %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{% url 'recetas_por_producto' producto.id %}">{{ producto.nombre }}</a>
+                        <span>
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="max-width: 50px;">
+                            {% endif %}
+                            <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No hay productos este mes.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

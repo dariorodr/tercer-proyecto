@@ -1,13 +1,34 @@
 {% extends "base.html" %}
-{% block titulo %} Inicio - Cocina de Temporada {% endblock %}
+{% block titulo %}Cocina de Temporada{% endblock %}
 {% block contenido %}
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Bienvenidos a Cocina de Temporada</h1>
-        <p class="col-md-8 fs-4">Descubre recetas con productos de temporada</p>
-        <a href="{% url 'productos_temporada' %}">
-            <button class="btn btn-primary btn-lg" type="button">Explorar</button>
-        </a>
+<div class="text-center my-5">
+    <h1 class="display-4">Cocina de Temporada</h1>
+    <p class="lead">Descubre qué cocinar con productos frescos y de temporada</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="text-center mb-4">Productos de {{ mes }}</h2>
+        <div class="card">
+            <div class="card-body">
+                {% if productos %}
+                    <ul class="list-group list-group-flush">
+                        {% for producto in productos %}
+                            <li class="list-group-item">
+                                <a href="{% url 'recetas_por_producto' producto.id %}">{{ producto.nombre }}</a>
+                                {% if producto.imagen %}
+                                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="max-width: 50px;">
+                                {% endif %}
+                            </li>
+                        {% empty %}
+                            <p>No hay productos este mes.</p>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Selecciona un mes para ver los productos.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
