@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %} Editar Receta {% endblock %}
+{% block content %}
+<h1>Editar Receta</h1>
+{% include "productos/form.html" with formulario=formulario cancel_url='recetas_por_producto' cancel_id=receta.producto.id %}
+{% endblock %}

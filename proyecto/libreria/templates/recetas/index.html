@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} Recetas con {{ producto.nombre }} {% endblock %}
+{% block content %}
+<h1>Recetas con {{ producto.nombre }}</h1>
+<p><a href="{% url 'crear_receta' producto.id %}">Agregar receta</a></p>
+<ul>
+{% for receta in recetas %}
+    <li>
+        <a href="{% url 'detalle_receta' receta.id %}">{{ receta.titulo }}</a> ({{ receta.dificultad }})
+        {% if receta.imagen %}
+            <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" width="50">
+        {% endif %}
+        <a href="{% url 'editar_receta' receta.id %}">Editar</a> |
+        <a href="{% url 'eliminar_receta' receta.id %}">Eliminar</a>
+    </li>
+{% empty %}
+    <p>No hay recetas para este producto.</p>
+{% endfor %}
+</ul>
+{% endblock %}

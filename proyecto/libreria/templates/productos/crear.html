@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %} Crear Producto {% endblock %}
+{% block content %}
+<h1>Crear Producto de Temporada</h1>
+{% include "productos/form.html" with formulario=formulario cancel_url='productos_temporada' %}
+{% endblock %}

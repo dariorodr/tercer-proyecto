@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %} Productos de Temporada {% endblock %}
+{% block contenido %}
+<h1>Productos de temporada - {{ mes }}</h1>
+<p><a href="{% url 'crear_producto' %}">Agregar producto</a></p>
+<ul>
+{% for producto in productos %}
+    <li>
+        <a href="{% url 'recetas_por_producto' producto.id %}">{{ producto.nombre }}</a>
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="100">
+        {% endif %}
+        <a href="{% url 'editar_producto' producto.id %}">Editar</a> |
+        <a href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
+    </li>
+{% empty %}
+    <p>No hay productos este mes.</p>
+{% endfor %}
+</ul>
+{% endblock %}
