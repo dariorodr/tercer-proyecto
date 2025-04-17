@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class ProductoTemporada(models.Model):
     nombre = models.CharField(max_length=100)
-    meses_temporada = models.CharField(max_length=100)  # Ej. "Enero, Febrero"
+    estación = models.CharField(max_length=100)  # Ej. "Enero, Febrero"
     descripcion = models.TextField(blank=True)
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
 

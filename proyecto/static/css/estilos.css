@@ -27,3 +27,50 @@ body {
     background-color: #28a745;
     color: white;
 }
+
+/* Estilos para el calendario */
+.btn {
+    min-width: 90px;
+    margin: 5px;
+}
+
+.btn-outline-success {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para las estaciones */
+h4 {
+    color: #8B4513; /* Marrón cálido */
+    font-family: 'Lora', serif; /* Fuente elegante */
+    font-size: 1.5rem; /* Más grande */
+    font-weight: 500; /* Peso medio */
+    text-transform: none; /* Sin mayúsculas forzadas */
+    letter-spacing: 0.5px; /* Espaciado sutil */
+    margin-bottom: 12px;
+}
+.mb-3 {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+/* Eliminar subrayado de los enlaces de productos */
+.list-group-item a {
+    text-decoration: none;
+    color: #2c3e50; /* Color del texto, ajustalo si querés */
+}
+
+.list-group-item a:hover {
+    text-decoration: none; /* Sin subrayado al pasar el mouse */
+    color: #28a745; /* Color al pasar el mouse, opcional */
+}
