@@ -121,10 +121,7 @@ def eliminar_producto(request, id):
     producto.delete()
     return redirect('productos_temporada')
 
-def recetas_por_producto(request, producto_id):
-    producto = get_object_or_404(ProductoTemporada, id=producto_id)
-    recetas = Receta.objects.filter(producto=producto)
-    return render(request, 'recetas/index.html', {'producto': producto, 'recetas': recetas})
+
 
 @login_required
 @user_passes_test(is_admin)
@@ -135,7 +132,7 @@ def crear_receta(request, producto_id):
         receta = formulario.save(commit=False)
         receta.producto = producto
         receta.save()
-        return redirect('recetas_por_producto', producto_id=producto.id)
+        return redirect('detalle_producto', id=producto.id)  # Cambiado
     return render(request, 'recetas/crear.html', {'formulario': formulario, 'producto': producto})
 
 @login_required
@@ -145,7 +142,7 @@ def editar_receta(request, id):
     formulario = RecetaForm(request.POST or None, request.FILES or None, instance=receta)
     if formulario.is_valid() and request.POST:
         formulario.save()
-        return redirect('recetas_por_producto', producto_id=receta.producto.id)
+        return redirect('detalle_producto', id=receta.producto.id)  # Cambiado
     return render(request, 'recetas/editar.html', {'formulario': formulario, 'receta': receta})
 
 @login_required
@@ -154,7 +151,7 @@ def eliminar_receta(request, id):
     receta = get_object_or_404(Receta, id=id)
     producto_id = receta.producto.id
     receta.delete()
-    return redirect('recetas_por_producto', producto_id=producto_id)
+    return redirect('detalle_producto', id=producto_id)  # Cambiado
 
 def detalle_receta(request, id):
     receta = get_object_or_404(Receta, id=id)

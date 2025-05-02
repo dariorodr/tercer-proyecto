@@ -36,7 +36,10 @@
                     <ul class="list-group list-group-flush">
                         {% for producto in productos %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a>
+                                <div>
+                                    <a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a>
+                                    <br>
+                                </div>
                                 {% if producto.imagen %}
                                     <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="max-width: 50px;">
                                 {% endif %}

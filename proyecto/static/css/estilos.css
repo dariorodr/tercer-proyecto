@@ -64,13 +64,26 @@ h4 {
     padding-bottom: 15px;
 }
 
-/* Eliminar subrayado de los enlaces de productos */
-.list-group-item a {
-    text-decoration: none;
-    color: #2c3e50; /* Color del texto, ajustalo si querés */
+/* Estilo para el botón "Ver receta" */
+.card .btn-primary {
+    color: #fff !important; /* Texto blanco */
 }
 
-.list-group-item a:hover {
-    text-decoration: none; /* Sin subrayado al pasar el mouse */
-    color: #28a745; /* Color al pasar el mouse, opcional */
+/* Estilos existentes (mantener) */
+.list-group-item a, .card a {
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+.list-group-item a:hover, .card a:hover {
+    text-decoration: none;
+    color: #28a745;
+}
+
+.text-muted.small {
+    font-size: 0.85rem;
+}
+
+.text-muted.small:hover {
+    color: #28a745;
 }
