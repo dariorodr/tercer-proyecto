@@ -1,32 +1,60 @@
 {% extends "base.html" %}
+{% load static %}
 {% block titulo %}{{ producto.nombre }} - Cocina de Temporada{% endblock %}
 {% block contenido %}
-<div class="my-5">
-    <h1 class="text-center">{{ producto.nombre }}</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    {% if producto.imagen %}
-                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded mb-3" style="max-width: 300px;">
-                    {% endif %}
-                    <p><strong>Estación:</strong> {{ producto.estación }}</p>
-                    <p><strong>Descripción:</strong> {{ producto.descripcion|default:"Sin descripción disponible." }}</p>
-                    <h3 class="mt-4">Recetas con {{ producto.nombre }}</h3>
-                    {% if recetas %}
-                        <ul class="list-group">
-                            {% for receta in recetas %}
-                                <li class="list-group-item">
-                                    <a href="{% url 'detalle_receta' receta.id %}">{{ receta.titulo }}</a>
-                                    <p class="mb-0"><small>{{ receta.dificultad }} | {{ receta.tiempo_preparacion }} min</small></p>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No hay recetas disponibles para este producto.</p>
-                    {% endif %}
-                </div>
+<div class="text-center my-5">
+    <h1 class="display-4">{{ producto.nombre }}</h1>
+    <p class="lead">Producto de {{ producto.estación }}</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded mb-3" style="max-width: 300px;">
+                {% endif %}
+                <h2 class="h4">Descripción</h2>
+                <p>{{ producto.descripcion|default:"No hay descripción disponible." }}</p>
+                <p><strong>Estación:</strong> {{ producto.estación }}</p>
             </div>
+        </div>
+
+        <h2 class="text-center mb-4">Recetas con {{ producto.nombre }}</h2>
+        {% if user.is_superuser %}
+        {% endif %}
+
+        {% if recetas %}
+            <div class="row">
+                {% for receta in recetas %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            {% if receta.imagen %}
+                                <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title h5">
+                                    <a href="{% url 'detalle_receta' receta.id %}">{{ receta.titulo }}</a>
+                                </h3>
+                                <p class="card-text"><small class="text-muted">Dificultad: {{ receta.dificultad }}</small></p>
+                                <p class="card-text"><small class="text-muted">Tiempo: {{ receta.tiempo_preparacion }} minutos</small></p>
+                                <p class="card-text"><small class="text-muted">Autor: {{ receta.autor.username|default:"Anónimo" }}</small></p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-primary">Ver receta</a>
+                                {% if user.is_superuser %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">No hay recetas disponibles para {{ producto.nombre }}.</p>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{% url 'inicio' %}" class="btn btn-outline-secondary">Volver al inicio</a>
         </div>
     </div>
 </div>
