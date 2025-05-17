@@ -1,13 +1,32 @@
 {% extends "base.html" %}
+{% load static %}
 {% block titulo %}Nosotros - Cocina de Temporada{% endblock %}
 {% block contenido %}
 <div class="my-5">
     <h1 class="text-center">Nosotros</h1>
-    <p class="lead text-center">Un proyecto para reconectar con el ritmo de la naturaleza</p>
+    <p class="lead text-center">Un proyecto para hacerte la cocina y la vida un poco más fácil</p>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <p>Somos una pagina que quiere no solo ayudarte a que sepas que productos estan de temporada,sino también ayudarte a que hacer con ellos para que la experiencia sea completa.</p>
+            <p>Somos una página que quiere no solo ayudarte a que sepas qué productos están de temporada, sino también ayudarte a qué hacer con ellos para que la experiencia sea completa.</p>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+        <p class="mb-2">© <span id="current-year"></span> Cocina de Temporada</p>
+        <p class="mb-2">Síguenos en nuestras redes sociales</p>
+        <a href="https://www.instagram.com/tu_usuario" target="_blank" class="mx-2 text-decoration-none">
+            <img src="{% static 'images/instagram-logo.png' %}" alt="Instagram" width="30" height="30">
+        </a>
+        <a href="https://www.facebook.com/tu_usuario" target="_blank" class="mx-2 text-decoration-none">
+            <img src="{% static 'images/facebook-logo3.png' %}" alt="Facebook" width="40" height="40">
+        </a>
+        <a href="https://x.com/tu_usuario" target="_blank" class="mx-2 text-decoration-none">
+            <img src="{% static 'images/x-logo.png' %}" alt="X" width="35" height="35">
+        </a>
+    </div>
+</footer>
 {% endblock %}

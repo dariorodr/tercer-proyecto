@@ -1,75 +1,45 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+/* Estilo para el footer en nosotros.html */
+footer.bg-dark {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 2rem 0;
+    background-color: #000 !important; /* Gris medio */
+    color: #fff !important;
+    border: 3px solid #6c757d !important; /* Bordes negros */
 }
 
-.navbar {
-    border-bottom: 1px solid #e0e0e0;
+/* Contenedor interno */
+footer.bg-dark .container {
+    max-width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-.navbar-brand {
-    font-weight: bold;
-    color: #2c3e50;
+/* Íconos de redes sociales */
+footer.bg-dark a img {
+    transition: transform 0.2s;
 }
 
-.list-group-item {
-    border: none;
-    border-bottom: 1px solid #e0e0e0;
+footer.bg-dark a img:hover {
+    transform: scale(1.2);
 }
 
-.btn-outline-primary {
-    border-color: #28a745;
-    color: #28a745;
-}
-
-.btn-outline-primary:hover {
-    background-color: #28a745;
-    color: white;
-}
-
-/* Estilos para el calendario */
-.btn {
-    min-width: 90px;
-    margin: 5px;
-}
-
-.btn-outline-success {
-    border-color: #28a745;
-    color: #28a745;
-}
-
-.btn-outline-success:hover {
-    background-color: #28a745;
-    color: white;
-}
-
-.card {
-    border: none;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para las estaciones */
-h4 {
-    color: #8B4513; /* Marrón cálido */
-    font-family: 'Lora', serif; /* Fuente elegante */
-    font-size: 1.5rem; /* Más grande */
-    font-weight: 500; /* Peso medio */
-    text-transform: none; /* Sin mayúsculas forzadas */
-    letter-spacing: 0.5px; /* Espaciado sutil */
-    margin-bottom: 12px;
-}
-.mb-3 {
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 15px;
-}
-
-/* Estilo para el botón "Ver receta" */
+/* Estilos existentes */
 .card .btn-primary {
-    color: #fff !important; /* Texto blanco */
+    color: #fff !important;
 }
 
-/* Estilos existentes (mantener) */
+.btn-info {
+    color: #fff !important;
+    background-color: #17a2b8;
+}
+
+.alert-container .alert.alert-error,
+.alert-container .alert.alert-error * {
+    color: #dc3545 !important;
+    background-color: #f8d7da !important;
+}
+
 .list-group-item a, .card a {
     text-decoration: none;
     color: #2c3e50;
