@@ -20,11 +20,7 @@
             </div>
         </div>
 
-        <h2 class="text-center mb-4">Recetas con {{ producto.nombre }}</h2>
-        {% if user.is_superuser %}
-        {% endif %}
-
-        {% if recetas %}
+        {% if recetas or receta_temporal %}
             <div class="row">
                 {% for receta in recetas %}
                     <div class="col-md-6 mb-4">
@@ -42,15 +38,49 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-primary">Ver receta</a>
-                                {% if user.is_superuser %}
-                                {% endif %}
                             </div>
                         </div>
                     </div>
                 {% endfor %}
+                {% if receta_temporal %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-info">
+                            {% if receta_temporal.imagen_base64 %}
+                                <img src="{{ receta_temporal.imagen_base64 }}" alt="{{ receta_temporal.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h3 class="card-title h5">{{ receta_temporal.titulo }}</h3>
+                                <p class="card-text"><small class="text-muted">Dificultad: {{ receta_temporal.dificultad }}</small></p>
+                                <p class="card-text"><small class="text-muted">Tiempo: {{ receta_temporal.tiempo_preparacion }} minutos</small></p>
+                                <p class="card-text"><small class="text-muted">Ingredientes: {{ receta_temporal.ingredientes }}</small></p>
+                                <p class="card-text"><small class="text-muted">Preparación: {{ receta_temporal.preparacion }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         {% else %}
             <p class="text-center">No hay recetas disponibles para {{ producto.nombre }}.</p>
+        {% endif %}
+
+        <p class="text-center mb-1">
+            <form method="post" action="{% url 'generar_receta_ia' producto_id=producto.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-info">¡Quiero otra receta!</button>
+            </form>
+        </p>
+
+        <!-- Mostrar mensajes de error -->
+        {% if messages %}
+            <div class="alert-container mb-4">
+                {% for message in messages %}
+                    <script>console.log("Message tag: {{ message.tags }}");</script>
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
         <div class="text-center mt-4">
@@ -58,4 +88,9 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/alertas.js' %}"></script>
 {% endblock %}
