@@ -1,59 +1,151 @@
-/* Estilo para el footer en nosotros.html */
+/* static/css/estilos.css */
+
+/* Estilos base para espaciado y disposición */
+.mb-4 { 
+    margin-bottom: 1.5rem !important; 
+}
+.d-flex { 
+    display: flex !important; 
+}
+.flex-wrap { 
+    flex-wrap: wrap !important; 
+}
+.justify-content-center { 
+    justify-content: center !important; 
+}
+.gap-2 { 
+    gap: 0.5rem !important; 
+}
+
+/* Estilos para el navbar */
+.navbar-nav.ms-auto {
+    margin-left: auto !important;
+}
+.navbar-toggler {
+    margin-left: auto !important;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+.navbar-toggler:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-color: #6c757d;
+}
+.navbar-toggler:focus, .navbar-toggler:active {
+    box-shadow: none !important;
+    outline: none !important;
+}
+.nav-link {
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+.nav-link:hover {
+    background-color: #f8f9fa;
+    color: #5a6268;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.nav-item.active .nav-link {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Estilos para enlaces en productos/detalle.html y recetas/detalle.html */
+.card-title a {
+    color: #000 !important; /* Negro para enlaces en card-title */
+    text-decoration: none;
+}
+.card-title a:hover {
+    color: #5a6268 !important; /* Gris oscuro al pasar el mouse */
+    text-decoration: underline;
+}
+.card-body a {
+    color: #000 !important; /* Negro para enlaces en card-body (recetas/detalle.html) */
+    text-decoration: none;
+}
+.card-body a:hover {
+    color: #5a6268 !important; /* Gris oscuro al pasar el mouse */
+    text-decoration: underline;
+}
+
+/* Estilos para botones */
+.btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #5a6268;
+    border-color: #000;
+}
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #707a83;
+}
+.btn-outline-secondary:hover {
+    background-color: #70757a;
+}
+.mes-actual {
+    border: 3px solid #000 !important;
+    box-sizing: border-box;
+}
+.btn-primary.mes-actual {
+    background-color: #5a6268 !important;
+}
+
+/* Estilos para el contenedor de sugerencias */
+#suggestions {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+#suggestions .list-group-item {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* Estilos para alertas */
+.alert-info {
+    color: #0c5460 !important;
+    background-color: #d1ecf1 !important;
+}
+
+/* Estilos para el footer */
 footer.bg-dark {
-    margin-left: 5px;
-    margin-right: 5px;
+    max-width: 2120px;
+    margin: 0 auto;
     padding: 2rem 0;
-    background-color: #000 !important; /* Gris medio */
+    background-color: #6c757d !important;
     color: #fff !important;
-    border: 3px solid #6c757d !important; /* Bordes negros */
+    border: 2px solid #000 !important;
 }
 
-/* Contenedor interno */
-footer.bg-dark .container {
-    max-width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+/* Estilos para los enlaces de productos */
+.list-group.list-group-flush .list-group-item a {
+    text-decoration: none !important;
+    color: #6c757d;
+}
+.list-group.list-group-flush .list-group-item a:hover {
+    text-decoration: underline;
+    color: #5a6268;
 }
 
-/* Íconos de redes sociales */
-footer.bg-dark a img {
-    transition: transform 0.2s;
-}
-
-footer.bg-dark a img:hover {
-    transform: scale(1.2);
-}
-
-/* Estilos existentes */
-.card .btn-primary {
-    color: #fff !important;
-}
-
-.btn-info {
-    color: #fff !important;
-    background-color: #17a2b8;
-}
-
-.alert-container .alert.alert-error,
-.alert-container .alert.alert-error * {
-    color: #dc3545 !important;
-    background-color: #f8d7da !important;
-}
-
-.list-group-item a, .card a {
+.row a {
     text-decoration: none;
-    color: #2c3e50;
-}
-
-.list-group-item a:hover, .card a:hover {
-    text-decoration: none;
-    color: #28a745;
-}
-
-.text-muted.small {
-    font-size: 0.85rem;
-}
-
-.text-muted.small:hover {
-    color: #28a745;
 }
