@@ -11,21 +11,46 @@
     <div class="col-md-10">
         <!-- Elemento para pasar el mes actual al JavaScript -->
         <div id="mes-actual" data-mes-actual="{{ mes_actual }}"></div>
-        
+
         <!-- Calendario interactivo agrupado por estaciones -->
         <div class="mb-4">
             {% for estacion, meses in estaciones.items %}
-                <div class="mb-3">
-                    <h4>{{ estacion }}</h4>
-                    <div class="d-flex flex-wrap justify-content-center gap-2">
-                        {% for mes in meses %}
-                            <a href="?mes={{ mes }}" class="btn {% if mes == mes_seleccionado %}btn-primary{% elif mes == mes_actual %}btn-outline-success{% else %}btn-outline-secondary{% endif %}" data-mes="{{ mes }}">
+                 <div class="mb-3">
+                     <h4>{{ estacion }}</h4>
+                     <div class="d-flex flex-wrap justify-content-center gap-2">
+                         {% for mes in meses %}
+                             <button class="btn {% if mes == mes_seleccionado %}btn-primary{% else %}btn-outline-secondary{% endif %} {% if mes == mes_actual %}mes-actual{% endif %}" data-mes="{{ mes }}">
                                 {{ mes }}
-                            </a>
-                        {% endfor %}
-                    </div>
-                </div>
+                             </button>
+                         {% endfor %}
+                     </div>
+                 </div>
             {% endfor %}
+        </div>
+
+        <!-- Mensajes -->
+        {% if messages %}
+            <div class="alert-container mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Formulario de búsqueda -->
+        <div class="mb-4">
+            <form method="GET" action="{% url 'inicio' %}" id="search-form">
+                <div class="input-group w-50 mx-auto position-relative">
+                    <input type="text" name="q" id="search-input" class="form-control" placeholder="Buscar productos (ej. manzana)" value="{{ query }}" autocomplete="off">
+                    <input type="hidden" name="mes" id="mes-input" value="{{ mes_seleccionado }}">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <!-- Contenedor de sugerencias -->
+                    <div id="suggestions" class="list-group position-absolute w-100" style="display: none;"></div>
+                </div>
+            </form>
         </div>
 
         <!-- Productos de la estación -->
@@ -47,7 +72,13 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p>No hay productos registrados para {{ estacion }}.</p>
+                    <div class="alert alert-info" role="alert">
+                        {% if query %}
+                            No se encontraron productos para "{{ query }}" en {{ estacion }} ({{ mes_seleccionado }}).
+                        {% else %}
+                            No hay productos registrados para {{ estacion }} ({{ mes_seleccionado }}).
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -56,5 +87,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/meses.js' %}"></script>
+    <script src="{% static 'js/alertas.js' %}"></script>
+    <script src="{% static 'js/autocomplete.js' %}"></script>
 {% endblock %}

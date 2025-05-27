@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages  # Agregado para mensajes
+from django.http import JsonResponse
 from .models import ProductoTemporada, Receta
 from .forms import ProductoTemporadaForm, RecetaForm
 from datetime import datetime
@@ -54,45 +55,49 @@ ESTACIONES = {
 }
 
 def inicio(request):
-    # Obtener el mes actual
     mes_actual_ingles = datetime.now().strftime('%B')
-    mes_actual = MESES_EN_ESPANOL.get(mes_actual_ingles, 'Abril')  # Fallback a Abril si falla
-    
-    # Obtener el mes seleccionado desde la URL, o usar el mes actual
+    mes_actual = MESES_EN_ESPANOL.get(mes_actual_ingles, 'Abril')
     mes_seleccionado = request.GET.get('mes', mes_actual)
-    
-    # Validar que el mes seleccionado sea válido, si no, usar el actual
+    query = request.GET.get('q', '').strip()
+
     if mes_seleccionado not in MESES_EN_ESPANOL.values():
-        mes_seleccionado = mes_actual
-    
-    # Mapear el mes a estación
+       mes_seleccionado = mes_actual
+
     estacion_seleccionada = MES_A_ESTACION.get(mes_seleccionado, 'Otoño')
-    
-    # Filtrar productos por estación
     productos = ProductoTemporada.objects.filter(estación__contains=estacion_seleccionada)
-    
+    if query:
+       productos = productos.filter(nombre__icontains=query)
+
     return render(request, 'paginas/inicio.html', {
         'productos': productos,
         'estacion': estacion_seleccionada,
         'estaciones': ESTACIONES,
         'mes_seleccionado': mes_seleccionado,
         'mes_actual': mes_actual,
-    })
+        'query': query,
+})
+
+
+def buscar_productos(request):
+    query = request.GET.get('q', '').strip()
+    
+    productos = ProductoTemporada.objects.all()
+    if query:
+        # Obtener productos que comienzan con la consulta
+        starts_with = productos.filter(nombre__istartswith=query).order_by('nombre')
+        # Obtener productos que contienen la consulta, excluyendo los que ya comienzan con ella
+        contains = productos.filter(nombre__icontains=query).exclude(nombre__istartswith=query).order_by('nombre')
+        # Combinar, priorizando starts_with
+        productos = list(starts_with) + list(contains)
+    else:
+        productos = productos.order_by('nombre')
+
+    resultados = [{'id': p.id, 'nombre': p.nombre} for p in productos]
+    return JsonResponse({'resultados': resultados})
 
 def nosotros(request):
     return render(request, 'paginas/nosotros.html')
 
-def productos_temporada(request):
-    mes_seleccionado = request.GET.get('mes', datetime.now().strftime('%B'))
-    mes_actual_ingles = datetime.now().strftime('%B')
-    mes_seleccionado_es = MESES_EN_ESPANOL.get(mes_seleccionado, MESES_EN_ESPANOL[mes_actual_ingles])
-    estacion_seleccionada = MES_A_ESTACION.get(mes_seleccionado_es, 'Primavera')
-    productos = ProductoTemporada.objects.filter(estación__contains=estacion_seleccionada)
-    
-    return render(request, 'productos/index.html', {
-        'productos': productos,
-        'estacion': estacion_seleccionada
-    })
 
 def detalle_producto(request, id):
     producto = get_object_or_404(ProductoTemporada, id=id)
