@@ -53,20 +53,27 @@
 
 /* Estilos para enlaces en productos/detalle.html y recetas/detalle.html */
 .card-title a {
-    color: #000 !important; /* Negro para enlaces en card-title */
+    color: #000 !important;
     text-decoration: none;
 }
 .card-title a:hover {
-    color: #5a6268 !important; /* Gris oscuro al pasar el mouse */
+    color: #5a6268 !important;
     text-decoration: underline;
 }
 .card-body a {
-    color: #000 !important; /* Negro para enlaces en card-body (recetas/detalle.html) */
+    color: #000 !important;
     text-decoration: none;
 }
 .card-body a:hover {
-    color: #5a6268 !important; /* Gris oscuro al pasar el mouse */
+    color: #5a6268 !important;
     text-decoration: underline;
+}
+
+/* Estilos para el input de búsqueda */
+.form-control#search-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5) !important; /* Sombreado negro al enfocar */
+    border-color: #6c757d; /* Borde gris coherente con el diseño */
+    outline: none !important; /* Elimina el outline predeterminado */
 }
 
 /* Estilos para botones */
