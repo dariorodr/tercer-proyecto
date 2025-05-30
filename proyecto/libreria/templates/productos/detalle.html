@@ -12,7 +12,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded mb-3" style="max-width: 300px;">
+                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded mb-3" style="max-width: 300px;">
                 {% endif %}
                 <h2 class="h4">Descripción</h2>
                 <p>{{ producto.descripcion|default:"No hay descripción disponible." }}</p>
@@ -21,66 +21,64 @@
         </div>
 
         {% if recetas or receta_temporal %}
-            <div class="row">
-                {% for receta in recetas %}
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            {% if receta.imagen %}
-                                <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
-                            {% endif %}
-                            <div class="card-body">
-                                <h3 class="card-title h5">
-                                    <a href="{% url 'detalle_receta' receta.id %}">{{ receta.titulo }}</a>
-                                </h3>
-                                <p class="card-text"><small class="text-muted">Dificultad: {{ receta.dificultad }}</small></p>
-                                <p class="card-text"><small class="text-muted">Tiempo: {{ receta.tiempo_preparacion }} minutos</small></p>
-                                <p class="card-text"><small class="text-muted">Autor: {{ receta.autor.username|default:"Anónimo" }}</small></p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-primary">Ver receta</a>
-                            </div>
-                        </div>
+        <div class="row">
+            {% for receta in recetas %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    {% if receta.imagen %}
+                    <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title h5">
+                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.titulo }}</a>
+                        </h3>
+                        <p class="card-text"><small class="text-muted">Dificultad: {{ receta.dificultad }}</small></p>
+                        <p class="card-text"><small class="text-muted">Tiempo: {{ receta.tiempo_preparacion }} minutos</small></p>
+                        <p class="card-text"><small class="text-muted">Autor: {{ receta.autor.username|default:"Anónimo" }}</small></p>
                     </div>
-                {% endfor %}
-                {% if receta_temporal %}
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100 border-info">
-                            {% if receta_temporal.imagen_base64 %}
-                                <img src="{{ receta_temporal.imagen_base64 }}" alt="{{ receta_temporal.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
-                            {% endif %}
-                            <div class="card-body">
-                                <h3 class="card-title h5">{{ receta_temporal.titulo }}</h3>
-                                <p class="card-text"><small class="text-muted">Dificultad: {{ receta_temporal.dificultad }}</small></p>
-                                <p class="card-text"><small class="text-muted">Tiempo: {{ receta_temporal.tiempo_preparacion }} minutos</small></p>
-                                <p class="card-text"><small class="text-muted">Ingredientes: {{ receta_temporal.ingredientes }}</small></p>
-                                <p class="card-text"><small class="text-muted">Preparación: {{ receta_temporal.preparacion }}</small></p>
-                            </div>
-                        </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <a href="{% url 'detalle_receta' receta.id %}" class="btn btn-primary">Ver receta</a>
                     </div>
-                {% endif %}
+                </div>
             </div>
-        {% else %}
-            <p class="text-center">No hay recetas disponibles para {{ producto.nombre }}.</p>
+            {% endfor %}
+            {% if receta_temporal %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-info">
+                    {% if receta_temporal.imagen_base64 %}
+                    <img src="{{ receta_temporal.imagen_base64 }}" alt="{{ receta_temporal.titulo }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title h5">{{ receta_temporal.titulo }}</h3>
+                        <p class="card-text"><small class="text-muted">Dificultad: {{ receta_temporal.dificultad }}</small></p>
+                        <p class="card-text"><small class="text-muted">Tiempo: {{ receta_temporal.tiempo_preparacion }}</small></p>
+                        <p class="card-text"><small class="text-muted">Ingredientes: {{ receta_temporal.ingredientes }}</small></p>
+                        <p class="card-text"><small class="text-muted">Preparación: {{ receta_temporal.preparacion }}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
         {% endif %}
 
         <p class="text-center mb-1">
-            <form method="post" action="{% url 'generar_receta_ia' producto_id=producto.id %}" style="display: inline;">
+            <form method="post" action="{% url 'generar_receta_ia' producto.id %}" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-info">¡Quiero otra receta!</button>
             </form>
         </p>
 
-        <!-- Mostrar mensajes de error -->
+        <!-- Mostrar mensajes -->
         {% if messages %}
-            <div class="alert-container mb-4">
-                {% for message in messages %}
-                    <script>console.log("Message tag: {{ message.tags }}");</script>
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
+        <div class="alert-container mb-4">
+            {% for message in messages %}
+            <script>console.log("Message tag: {{ message.tags }}");</script>
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            {% endfor %}
+        </div>
         {% endif %}
 
         <div class="text-center mt-4">
@@ -88,9 +86,7 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
-
 {% block extra_js %}
-    <script src="{% static 'js/alertas.js' %}"></script>
+<script src="{% static 'js/alertas.js' %}"></script>
 {% endblock %}

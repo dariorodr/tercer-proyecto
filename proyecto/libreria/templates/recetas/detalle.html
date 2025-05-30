@@ -8,15 +8,28 @@
 
 <div class="row justify-content-center">
     <div class="col-md-10">
+        <!-- Mensajes -->
+        {% if messages %}
+        <div class="alert-container mb-4">
+            {% for message in messages %}
+            <script>console.log("Message tag: {{ message.tags }}");</script>
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="card mb-4">
             {% if receta.imagen %}
-                <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="card-img-top" style="max-height: 400px; object-fit: cover;">
+            <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="card-img-top" style="max-height: 400px; object-fit: cover;">
             {% endif %}
             <div class="card-body">
                 <h2 class="h4">Detalles</h2>
                 <p><strong>Producto:</strong> <a href="{% url 'detalle_producto' receta.producto.id %}">{{ receta.producto.nombre }}</a></p>
-                <p><strong>Ingredientes:</strong> {{ receta.ingredientes }}</p>
-                <p><strong>Preparación:</strong> {{ receta.preparacion }}</p>
+                <p><strong>Ingredientes:</strong> {{ receta.ingredientes|default:"Sin ingredientes disponibles." }}</p>
+                <p><strong>Preparación:</strong> {{ receta.preparacion|default:"Sin instrucciones disponibles." }}</p>
                 <p><strong>Tiempo de preparación:</strong> {{ receta.tiempo_preparacion }} minutos</p>
                 <p><strong>Dificultad:</strong> {{ receta.dificultad }}</p>
                 <p><strong>Autor:</strong> {{ receta.autor.username|default:"Anónimo" }}</p>
