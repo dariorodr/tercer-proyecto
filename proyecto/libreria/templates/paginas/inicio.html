@@ -7,82 +7,82 @@
     <p class="lead">Descubre qué cocinar con productos nacionales y de temporada</p>
 </div>
 
+{% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
 <div class="row justify-content-center">
     <div class="col-md-10">
         <!-- Elemento para pasar el mes actual al JavaScript -->
         <div id="mes-actual" data-mes-actual="{{ mes_actual }}"></div>
-
-        <!-- Calendario interactivo agrupado por estaciones -->
-        <div class="mb-4">
-            {% for estacion, meses in estaciones.items %}
-                 <div class="mb-3">
-                     <h4>{{ estacion }}</h4>
-                     <div class="d-flex flex-wrap justify-content-center gap-2">
-                         {% for mes in meses %}
-                             <button class="btn {% if mes == mes_seleccionado %}btn-primary{% else %}btn-outline-secondary{% endif %} {% if mes == mes_actual %}mes-actual{% endif %}" data-mes="{{ mes }}">
-                                {{ mes }}
-                             </button>
-                         {% endfor %}
-                     </div>
+    <!-- Calendario interactivo agrupado por estaciones -->
+    <div class="mb-4">
+        {% for estacion, meses in estaciones.items %}
+             <div class="mb-3">
+                 <h4>{{ estacion }}</h4>
+                 <div class="d-flex flex-wrap justify-content-center gap-2">
+                     {% for mes in meses %}
+                         <button class="btn {% if mes == mes_seleccionado %}btn-primary{% else %}btn-outline-secondary{% endif %} {% if mes == mes_actual %}mes-actual{% endif %}" data-mes="{{ mes }}">
+                            {{ mes }}
+                         </button>
+                     {% endfor %}
                  </div>
-            {% endfor %}
-        </div>
+             </div>
+        {% endfor %}
+    </div>
 
-        <!-- Mensajes -->
-        {% if messages %}
-            <div class="alert-container mb-4">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
+    <!-- Formulario de búsqueda -->
+    <div class="mb-4">
+        <form method="GET" action="{% url 'inicio' %}" id="search-form">
+            <div class="input-group w-50 mx-auto position-relative">
+                <input type="text" name="q" id="search-input" class="form-control" placeholder="Buscar productos (ej. manzana)" value="{{ query }}" autocomplete="off">
+                <input type="hidden" name="mes" id="mes-input" value="{{ mes_seleccionado }}">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <!-- Contenedor de sugerencias -->
+                <div id="suggestions" class="list-group position-absolute w-100" style="display: none;"></div>
             </div>
-        {% endif %}
+        </form>
+    </div>
 
-        <!-- Formulario de búsqueda -->
-        <div class="mb-4">
-            <form method="GET" action="{% url 'inicio' %}" id="search-form">
-                <div class="input-group w-50 mx-auto position-relative">
-                    <input type="text" name="q" id="search-input" class="form-control" placeholder="Buscar productos (ej. manzana)" value="{{ query }}" autocomplete="off">
-                    <input type="hidden" name="mes" id="mes-input" value="{{ mes_seleccionado }}">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                    <!-- Contenedor de sugerencias -->
-                    <div id="suggestions" class="list-group position-absolute w-100" style="display: none;"></div>
+    <!-- Productos de la estación -->
+    <h2 class="text-center mb-4">Productos de {{ estacion }}</h2>
+    <div class="card">
+        <div class="card-body">
+            {% if productos %}
+                <ul class="list-group list-group-flush">
+                    {% for producto in productos %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a>
+                                <br>
+                            </div>
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="max-width: 50px;">
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info" role="alert">
+                    {% if query %}
+                        No se encontraron productos para "{{ query }}" en {{ estacion }} ({{ mes_seleccionado }}).
+                    {% else %}
+                        No hay productos registrados para {{ estacion }} ({{ mes_seleccionado }}).
+                    {% endif %}
                 </div>
-            </form>
-        </div>
-
-        <!-- Productos de la estación -->
-        <h2 class="text-center mb-4">Productos de {{ estacion }}</h2>
-        <div class="card">
-            <div class="card-body">
-                {% if productos %}
-                    <ul class="list-group list-group-flush">
-                        {% for producto in productos %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a>
-                                    <br>
-                                </div>
-                                {% if producto.imagen %}
-                                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-thumbnail" style="max-width: 50px;">
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <div class="alert alert-info" role="alert">
-                        {% if query %}
-                            No se encontraron productos para "{{ query }}" en {{ estacion }} ({{ mes_seleccionado }}).
-                        {% else %}
-                            No hay productos registrados para {{ estacion }} ({{ mes_seleccionado }}).
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
+</div>
+
 </div>
 {% endblock %}
 
@@ -91,3 +91,4 @@
     <script src="{% static 'js/alertas.js' %}"></script>
     <script src="{% static 'js/autocomplete.js' %}"></script>
 {% endblock %}
+
