@@ -7,7 +7,13 @@ from django.views.defaults import page_not_found, server_error, permission_denie
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('libreria.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Sirve multimedia
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Sirve estáticos en desarrollo
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = page_not_found
 handler500 = server_error

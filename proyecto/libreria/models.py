@@ -36,5 +36,6 @@ class Receta(models.Model):
         if self.producto and self.producto.recetas.count() >= 5 and not self.id:
             raise ValidationError(f'No se pueden agregar más de 5 recetas para {self.producto.nombre}.')
 
+
     def __str__(self):
         return self.titulo

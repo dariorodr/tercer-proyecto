@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('Alertas script loaded'); // Para depuración
     const alerts = document.querySelectorAll('.alert');
-    console.log('Found alerts:', alerts.length); // Para depuración
     alerts.forEach(alert => {
         setTimeout(() => {
             alert.classList.remove('show');

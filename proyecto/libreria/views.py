@@ -73,8 +73,7 @@ def inicio(request):
             productos = ProductoTemporada.objects.none()
         else:
             productos = productos.filter(nombre__icontains=query)
-            if not productos.exists():
-                messages.warning(request, f"No se encontraron productos para '{query}' en {mes_seleccionado}.")
+
 
     return render(request, 'paginas/inicio.html', {
         'productos': productos,

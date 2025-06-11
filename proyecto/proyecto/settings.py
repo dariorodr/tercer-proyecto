@@ -31,12 +31,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ux7ur=_em6b^$@r3_hqd0(w)g#@&au$ei#l08%!k)o-eg5lw4x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # Cambiado a False para pruebas
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,7 +61,7 @@ ROOT_URLCONF = 'proyecto.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'libreria' / 'templates'],  # Ajustado para plantillas
+        'DIRS': [BASE_DIR / 'templates'],  # Ajustado para incluir templates/
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,8 +77,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'proyecto.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -92,8 +89,6 @@ DATABASES = {
 }
 
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -110,30 +105,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
-LANGUAGE_CODE = 'es-ar'  # Cambiado a español (Argentina)
-
-TIME_ZONE = 'America/Argentina/Buenos_Aires'  # Zona horaria de Argentina
-
+LANGUAGE_CODE = 'es-ar'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Archivos estáticos de la app libreria
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # Carpeta para collectstatic
 
 # Media files (Images uploaded by users)
-MEDIA_ROOT = os.path.join(BASE_DIR, 'proyecto', 'imagenes')
-MEDIA_URL = '/imagenes/'
+MEDIA_URL = '/media/'  # Ajustado para coincidir con urls.py
+MEDIA_ROOT = BASE_DIR / 'media'  # Carpeta para imágenes
 
 # Authentication
-LOGIN_URL = '/admin/login/'  # Redirige al login del admin para vistas protegidas
+LOGIN_URL = '/admin/login/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

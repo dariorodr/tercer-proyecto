@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Autocomplete script loaded');
     const searchInput = document.getElementById('search-input');
     const suggestionsContainer = document.getElementById('suggestions');
     const mesInput = document.getElementById('mes-input');
