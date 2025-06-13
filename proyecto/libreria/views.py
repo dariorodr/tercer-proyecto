@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages  # Agregado para mensajes
+from django.contrib import messages  
 from django.http import JsonResponse
 from .models import ProductoTemporada, Receta
 from .forms import ProductoTemporadaForm, RecetaForm
@@ -57,23 +57,21 @@ ESTACIONES = {
 def inicio(request):
     mes_actual_ingles = datetime.now().strftime('%B')
     mes_actual = MESES_EN_ESPANOL.get(mes_actual_ingles, 'Mayo')
-    mes_seleccionado = request.GET.get('mes', mes_actual)
+    mes_seleccionado = request.GET.get('mes', mes_actual).capitalize()
     query = request.GET.get('q', '').strip()
 
+    # Validar mes_seleccionado
     if mes_seleccionado not in MESES_EN_ESPANOL.values():
         mes_seleccionado = mes_actual
-        messages.warning(request, f'Mes inválido. Se seleccionó {mes_actual}.')
 
     estacion_seleccionada = MES_A_ESTACION.get(mes_seleccionado, 'Otoño')
     productos = ProductoTemporada.objects.filter(estación__contains=estacion_seleccionada)
 
     if query:
         if len(query) < 3:
-            messages.error(request, 'La búsqueda debe tener al menos 3 caracteres.')
             productos = ProductoTemporada.objects.none()
         else:
             productos = productos.filter(nombre__icontains=query)
-
 
     return render(request, 'paginas/inicio.html', {
         'productos': productos,
@@ -83,6 +81,7 @@ def inicio(request):
         'mes_actual': mes_actual,
         'query': query,
     })
+
 
 def buscar_productos(request):
     query = request.GET.get('q', '').strip()
@@ -105,21 +104,17 @@ def nosotros(request):
     return render(request, 'paginas/nosotros.html')
 
 def detalle_producto(request, id):
-    try:
-        producto = get_object_or_404(ProductoTemporada, id=id)
-        recetas = Receta.objects.filter(producto=producto)
-        receta_temporal = request.session.get(f'receta_temporal_{id}', None)
-        if not recetas.exists() and not receta_temporal:
-            messages.info(request, f'No hay recetas disponibles para {producto.nombre}. ¡Prueba generar una con IA!')
-        context = {
-            'producto': producto,
-            'recetas': recetas,
-            'receta_temporal': receta_temporal,
-        }
-        return render(request, 'productos/detalle.html', context)
-    except Exception as e:
-        messages.error(request, f'Error al cargar el producto: {str(e)}')
-        raise  # Activa 500.html
+    producto = get_object_or_404(ProductoTemporada, id=id)
+    recetas = Receta.objects.filter(producto=producto)
+    receta_temporal = request.session.get(f'receta_temporal_{id}', None)
+    if not recetas.exists() and not receta_temporal:
+        messages.info(request, f'No hay recetas disponibles para {producto.nombre}. ¡Prueba generar una con IA!')
+    context = {
+        'producto': producto,
+        'recetas': recetas,
+        'receta_temporal': receta_temporal,
+    }
+    return render(request, 'productos/detalle.html', context)
 
 @login_required
 @user_passes_test(is_admin)
@@ -178,17 +173,13 @@ def eliminar_receta(request, id):
     return redirect('detalle_producto', id=producto_id)
 
 def detalle_receta(request, id):
-    try:
-        receta = get_object_or_404(Receta, id=id)
-        if not receta.titulo or not receta.ingredientes or not receta.preparacion:
-            messages.warning(request, 'Esta receta está incompleta. Algunos datos no están disponibles.')
-        context = {
-            'receta': receta,
-        }
-        return render(request, 'recetas/detalle.html', context)
-    except Exception as e:
-        messages.error(request, f'Error al cargar la receta: {str(e)}')
-        raise  # Activa 500.html
+    receta = get_object_or_404(Receta, id=id)
+    if not receta.titulo or not receta.ingredientes or not receta.preparacion:
+        messages.warning(request, 'Esta receta está incompleta. Algunos datos no están disponibles.')
+    context = {
+        'receta': receta,
+    }
+    return render(request, 'recetas/detalle.html', context)
     
 def generar_receta_ia(request, producto_id):
     producto = get_object_or_404(ProductoTemporada, id=producto_id)
@@ -263,3 +254,6 @@ def generar_receta_ia(request, producto_id):
         'recetas': recetas_persistentes,
         'receta_temporal': receta_temporal,
     })
+    
+def custom_404(request, exception):
+    return render(request, 'paginas/404.html', status=404)
