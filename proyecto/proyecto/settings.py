@@ -72,9 +72,11 @@ DATABASES = {
         'PASSWORD': os.getenv('DB_PASSWORD', '876543210'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '3306'),
+        'OPTIONS': {
+            'ssl_disabled': True,
+        },
     }
 }
-
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
