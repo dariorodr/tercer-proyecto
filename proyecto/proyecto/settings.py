@@ -1,5 +1,6 @@
 # proyecto/settings.py
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -12,8 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Seguridad
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'hWubp6mjdoIfLDmlxYQlv-39pmLG6dXxlSXodnGLGDQDWKxADeSHI2SAMJenObcARWs')
-DEBUG = False  # Desactivar para producción
-ALLOWED_HOSTS = ['dishub.net', 'www.dishub.net', '127.0.0.1', 'localhost']
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.railway.app']
 
 # Aplicaciones
 INSTALLED_APPS = [
@@ -22,13 +23,16 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'libreria',
 ]
 
 # Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,30 +65,17 @@ WSGI_APPLICATION = 'proyecto.wsgi.application'
 
 # Base de datos
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'cocina_temporada'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', '876543210'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
-    }
+    'default': dj_database_url.config(
+        default=f"mysql://{os.getenv('DB_USER','root')}:{os.getenv('DB_PASSWORD','876543210')}@{os.getenv('DB_HOST','localhost')}:{os.getenv('DB_PORT','3306')}/{os.getenv('DB_NAME','cocina_temporada')}"
+    )
 }
 
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internacionalización
@@ -97,13 +88,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Archivos multimedia
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # Sesiones
-SESSION_COOKIE_AGE = 1200  # 20 minutos
+SESSION_COOKIE_AGE = 1200
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # URL de login
@@ -116,6 +113,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 handler404 = 'libreria.views.custom_404'
 
 # Configuración de SSL
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
